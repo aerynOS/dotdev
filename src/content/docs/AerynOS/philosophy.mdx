@@ -20,11 +20,11 @@ Most Linux distributions follow the [Filesystem Hierarchy Standard](https://refs
 
 In AerynOS, packages are forbidden from containing any files outside of the `/usr` directory. The `/usr` directory exclusively belongs to the system with the user not intended to make any changes in this directory what-so-ever. Files written under the `/usr` directory by a user will get removed (or reverted) the next time the system is updated.
 
-In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in `/etc` and `/var` directories belong to the user. In this way, if a user deletes their configuration files located in the `/etc` directory, this will revert the system back to factory defaults
+In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in `/etc` and `/var` directories belong to the user. In this way, if a user deletes their configuration files located in the `/etc` directory, this will revert the system back to factory defaults.
 
 The stateless Linux concept was originally proposed by Red Hat in 2004 and the idea has continued to evolve from there. AerynOS leans towards the approach developed by Clear Linux, and we are refining it further.
 
-However, it might still be necessary to create or update system configuration files in lockstep with package installation. In AerynOS, the only way for files to get created or updated under `/etc` or `/var` during package installation is via package "triggers". Triggers are small scripts that are run at the tail end of package installation. AerynOS supports two forms of package triggers: Transaction triggers and System triggers.
+However, it might still be necessary to create or update system configuration files in lockstep with package installation. In AerynOS, the only way for files to get created or updated under `/etc` or `/var` during package installation is via package "triggers". Triggers are small scripts that are run at the tail end of package installation. AerynOS supports two forms of package triggers: Transaction scope triggers and System scope triggers.
 
 ### Transaction Triggers
 
