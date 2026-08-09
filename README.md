@@ -108,3 +108,24 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+
+## Licences
+
+ This repository contains multiple types of content, each under its own licence:
+
+| Content | Licence |
+|---------|---------|
+| Documentation (content/docs/) | [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt) |
+| Website code (Anything else) | [MIT](LICENSES/MIT.txt) |
+
+### Website Code (MIT)
+
+The website build configuration, templates, and code are licensed under the MIT licence.
+
+### Documentation (CC BY-SA 4.0)
+
+All documentation content may be shared and adapted under the terms of the Creative Commons Attribution-ShareAlike 4.0 International licence.
+
+### Other
+
+Some files might have a different license. See the file's content for details.
