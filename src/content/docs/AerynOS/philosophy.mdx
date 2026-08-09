@@ -1,6 +1,6 @@
 ---
 title: Philosophy
-lastUpdated: 2026-07-15T12:00:00Z
+lastUpdated: 2026-08-09T16:00:00Z
 description: The philosophy of AerynOS
 ---
 
@@ -14,13 +14,13 @@ AerynOS is the collective output of brand new tooling and associated processes, 
 
 Our ground up approach has enabled us to provide atomic updates without requiring reboots or having to utilize containers for package delivery. Part of our design philosophy is to deliver "just enough" flexibility and customizability to end users, without becoming a meta-distribution, and without compromising on predictability or reliability.
 
-## Stateless (aka `hermetic /usr`)
+## Stateless (aka hermetic `/usr`)
 
 Most Linux distributions follow the [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf) which sets the structure for all files and directories on a Unix-like system. In traditional FHS based Linux distributions, package files can be installed to multiple directories, these can be directories or files that users may interact with (such as config files).
 
-In AerynOS, packages are forbidden from containing any files outside of the `/usr` directory. The `/usr` directory exclusively belongs to the system with the user not intended to make any changes in this directory what-so-ever. Files written under the `/usr` directory by a user will get removed (or reverted) the next time the system is updated.
+In AerynOS, packages are forbidden from containing any files outside of the `/usr` directory. The `/usr` directory exclusively belongs to the system with the user not intended to make any changes in this directory whatsoever. Files written under the `/usr` directory by a user will get removed (or reverted) the next time the system is updated.
 
-In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in `/etc` and `/var` directories belong to the user. In this way, if a user deletes their configuration files located in the `/etc` directory, this will revert the system back to factory defaults.
+In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in `/etc` and `/var` directories belongs to the user. In this way, if a user deletes their configuration files located in the `/etc` directory, this will revert the system back to factory defaults.
 
 The stateless Linux concept was originally proposed by Red Hat in 2004 and the idea has continued to evolve from there. AerynOS leans towards the approach developed by Clear Linux, and we are refining it further.
 
@@ -38,7 +38,7 @@ System triggers do not run in an isolated container, but instead are run in the 
 
 An atomic update is a series of changes to a system that are treated as a single, indivisible operation. If any part of this update fails, then the entire update is canceled with all prior parts of the incomplete update being rolled back. This means that either an update completes fully as intended, or the system is left in the state it was in before the update was attempted. This is important because partial updates often cause significant issues such as bricked installs.
 
-AerynOS' approach to atomic updates is fairly different to the approach taken by other Linux distributions, which mostly use an A/B switch model using specific read-only filesystems to swap the whole system upon reboot. Atomic updates in AerynOS are managed by its package manager `moss` (which we also refer to as a `system state manager`). As such, AerynOS is not tied to using read-only filesystems and this allows for the use of XFS, ext4 and F2FS. In the future, additional filesystems will be tested and considered.
+AerynOS' approach to atomic updates is fairly different to the approach taken by other Linux distributions, which mostly use an A/B switch model using specific read-only filesystems to swap the whole system upon reboot. Atomic updates in AerynOS are managed by its package manager `moss` (which we also refer to as a "system state manager"). As such, AerynOS is not tied to using read-only filesystems and this allows for the use of XFS, ext4 and F2FS. In the future, additional filesystems will be tested and considered.
 
 As mentioned above, AerynOS utilizes a stateless design where packages can only be installed to the `/usr` directory. The knowledge that packages can only be installed to this directory allows AerynOS to innovate in its approach to atomic updates.
 
@@ -81,7 +81,7 @@ Whilst it is unlikely that a user would ever knowingly delete these very importa
 We have delivered on our concept of versioned repositories. We currently offer two repositories or "Update Streams":
 
 - The default "unstable" stream, and 
-- A testing "volatile" stream
+- A testing "volatile" stream.
 
 As a rolling release distribution, packages are landed in our volatile stream first for testing. After a period of time (usually every 1 to 2 weeks), we sync the state of the volatile stream to our unstable stream, so our wider user community gets to receive updated packages. Each stream update from volatile -> unstable has a corresponding addressable tag, which also acts as a snapshot in time that we can go back and test from.
 
@@ -89,7 +89,7 @@ As a rolling release distribution, packages are landed in our volatile stream fi
 
 By default, AerynOS operates as a standard "imperative" Linux Distribution. We have implemented the concept of an (optional!) install-time declarative system-model where a user can define (within the `/etc/moss/system-model.kdl` file), which exact packages and from which repository they want these packages.
 
-`Moss` will then keep the system in sync with this system-model as updates arrive. Combining the use of addressable tags, our system-model approach goes further and enables users to define a specific tag on our unstable repository, becoming more akin to a fixed point release model. The user can change the tag they wish to fix to, or revert back to the rolling release model at any time. This flexibility enables users to replicate their system-model across different installs and share system-models with the AerynOS team for troubleshooting purposes.
+`moss` will then keep the system in sync with this system-model as updates arrive. Combining the use of addressable tags, our system-model approach goes further and enables users to define a specific tag on our unstable repository, becoming more akin to a fixed point release model. The user can change the tag they wish to fix to, or revert back to the rolling release model at any time. This flexibility enables users to replicate their system-model across different installs and share system-models with the AerynOS team for troubleshooting purposes.
 
 ## Package Management 
 
