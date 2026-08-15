@@ -6,13 +6,13 @@ license: "CC-BY-SA-4.0"
 copyright: "Copyright © 2025 aerynOS Developers"
 ---
 
-To set up a AerynOS system to be able to build package recipes, a few prerequisites need to be
+To set up a aerynOS system to be able to build package recipes, a few prerequisites need to be
 installed, and a new directory for storing local build artifacts needs to be set up.
 
 
 ## Installing the `build-essential` package
 
-We maintain a `build-essential` metapackage that should contain the basics for getting started with packaging on AerynOS.
+We maintain a `build-essential` metapackage that should contain the basics for getting started with packaging on aerynOS.
 
 ```bash
 sudo moss sync -u
@@ -20,16 +20,16 @@ sudo moss it build-essential
 ```
 
 
-## Activating the AerynOS helper scripts
+## Activating the aerynOS helper scripts
 
-The easiest way to create a local repository is to use the helper script distributed with the AerynOS recipe repository in the `tools/` directory.
+The easiest way to create a local repository is to use the helper script distributed with the aerynOS recipe repository in the `tools/` directory.
 
 Start by cloning the recipes/ git repository:
 
 ```bash
 mkdir -pv Projects/aerynos/
 pushd Projects/aerynos
-git clone https://github.com/AerynOS/recipes
+git clone https://github.com/aerynOS/recipes
 ```
 
 After the recipes/ git repository has been cloned, symlink helpers.bash into `~/.bashrcd.d/`:
