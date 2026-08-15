@@ -27,8 +27,8 @@ The easiest way to create a local repository is to use the helper script distrib
 Start by cloning the recipes/ git repository:
 
 ```bash
-mkdir -pv repos/aerynos/
-pushd repos/aerynos
+mkdir -pv Projects/aerynos/
+pushd Projects/aerynos
 git clone https://github.com/AerynOS/recipes
 ```
 
@@ -37,7 +37,7 @@ After the recipes/ git repository has been cloned, symlink helpers.bash into `~/
 ```bash
 popd
 mkdir -pv ~/.bashrc.d/
-ln -sv ~/repos/aerynos/recipes/tools/helpers.bash ~/.bashrc.d/90-aerynos-helpers.bash
+ln -sv ~/Projects/aerynos/recipes/tools/helpers.bash ~/.bashrc.d/90-aerynos-helpers.bash
 ```
 
 Finally, execute the following in a new terminal tab:
