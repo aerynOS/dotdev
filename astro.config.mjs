@@ -140,7 +140,7 @@ export default defineConfig({
                   items: [
                     { slug: "users/desktops/window-managers" },
                     { slug: "users/desktops/window-managers/hyprland" },
-                    { slug: "users/desktops/window-managers/mangowc" },
+                    { slug: "users/desktops/window-managers/mangowm" },
                     { slug: "users/desktops/window-managers/niri" },
                     { slug: "users/desktops/window-managers/sway" },
                   ],
