@@ -10,13 +10,13 @@ export interface CommitInfo {
   committer: CommitterInfo;
 }
 
-export const REPO = "AerynOS/dotdev";
+export const REPO = "aerynOS/dotdev";
 
 const cache = new Map<string, CommitterInfo>();
 
 const baseHeaders = {
   Accept: "application/vnd.github+json",
-  "User-Agent": "AerynOS/docs (https://aerynos.dev)",
+  "User-Agent": "aerynOS/docs (https://aerynos.dev)",
 };
 
 const GITHUB_OPTIONS: RequestInit = process.env.GITHUB_TOKEN

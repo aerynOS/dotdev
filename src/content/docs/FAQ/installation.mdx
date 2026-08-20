@@ -1,7 +1,7 @@
 ---
 title: Installation FAQ
 lastUpdated: 2026-01-15T12:25:00Z
-description: Installation FAQ for AerynOS
+description: Installation FAQ for aerynOS
 license: "CC-BY-SA-4.0"
 copyright: "Copyright © 2025 aerynOS Developers"
 ---
@@ -10,9 +10,9 @@ import { Aside } from "@astrojs/starlight/components";
 
 # Installation Questions
 
-### Which CPUs does AerynOS support?
+### Which CPUs does aerynOS support?
 
-AerynOS is currently only compiled for the x86-64-v2 target architecture, which means that it will run on CPUs supporting x86-64-v2 or greater psABI feature levels.
+aerynOS is currently only compiled for the x86-64-v2 target architecture, which means that it will run on CPUs supporting x86-64-v2 or greater psABI feature levels.
 
 Checking the currently supported x86-64 psABI feature level of a system can be done by typing the following command in a terminal as a normal user:
 
@@ -29,34 +29,34 @@ On an x86-64-v2 based system, you will see the following output:
 ```
 
 <Aside type="note">
-    If the x86-64-v3 and x86-64-v4 psABI feature levels were supported, they would also show `(supported, searched)` next to them. AerynOS will still work on these systems.
+    If the x86-64-v3 and x86-64-v4 psABI feature levels were supported, they would also show `(supported, searched)` next to them. aerynOS will still work on these systems.
 </Aside>
 
-### Does AerynOS offer NVIDIA GPU support?
+### Does aerynOS offer NVIDIA GPU support?
 
 Due to the way NVIDIA distributes its drivers, maintaining them in a distro is labor-intensive and frustrating when they do not work as advertised.
 
-Given AerynOS is in the Alpha development stage, only limited, best effort NVIDIA enablement related to cards supported by the so-called nvidia-open-gpu-kernel-modules is currently offered.
+Given aerynOS is in the Alpha development stage, only limited, best effort NVIDIA enablement related to cards supported by the so-called nvidia-open-gpu-kernel-modules is currently offered.
 
-You can check the status of NVIDIA support in [AerynOS/recipes#435](https://github.com/AerynOS/recipes/issues/435)
+You can check the status of NVIDIA support in [aerynOS/recipes#435](https://github.com/aerynOS/recipes/issues/435)
 
-### Does AerynOS support being installed alongside another OS?
+### Does aerynOS support being installed alongside another OS?
 
 Officially? Not yet.
 
-You can try, but there is no guarantee that AerynOS won't eat your other OS.
+You can try, but there is no guarantee that aerynOS won't eat your other OS.
 
 You have been warned.
 
-### What is the recommended partition layout for AerynOS?
+### What is the recommended partition layout for aerynOS?
 
-In practice, we recommend that you install AerynOS to a separate drive with:
+In practice, we recommend that you install aerynOS to a separate drive with:
 
 - A >=256MB ESP FAT32 partition (type 1 in fdisk).
   -   This must be manually formatted for the installer to recognize it.
 - A 4GB XBOOTLDR FAT32 partition (type 142 in fdisk, bls_boot in gparted).
   - This must be manually formatted for the installer to recognize it.
-  - This partition is large, because it is where the AerynOS kernel+initramfs and (in the future) rescue image files will be saved.
+  - This partition is large, because it is where the aerynOS kernel+initramfs and (in the future) rescue image files will be saved.
 - A >20 GB system xfs partition
   - This must be manually formatted for the installer to recognize it.
   - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
@@ -86,4 +86,4 @@ nvme1n1
 ermo@virgil:~
 ```
 
-NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed. You can do this if you want to use a different filesystem than xfs for your /home folders for whatever reason.
+NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after aerynOS has been installed. You can do this if you want to use a different filesystem than xfs for your /home folders for whatever reason.

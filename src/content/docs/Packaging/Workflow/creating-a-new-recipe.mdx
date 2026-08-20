@@ -8,9 +8,9 @@ copyright: "Copyright © 2025 aerynOS Developers"
 import { Aside } from '@astrojs/starlight/components';
 
 
-This guide details the process of creating a new package recipe that is not yet present in the [AerynOS repository](https://github.com/AerynOS/recipes). We will use Nano as the running example, but the same steps apply to any new package. 
+This guide details the process of creating a new package recipe that is not yet present in the [aerynOS repository](https://github.com/aerynOS/recipes). We will use Nano as the running example, but the same steps apply to any new package. 
 
-Before creating the package recipe yourself, please double check that there isn't already an outstanding PR for the package you want to include. Please also check if someone has created a new package request issue in the [AerynOS recipes repository](https://github.com/AerynOS/recipes).
+Before creating the package recipe yourself, please double check that there isn't already an outstanding PR for the package you want to include. Please also check if someone has created a new package request issue in the [aerynOS recipes repository](https://github.com/aerynOS/recipes).
 
 ## Prepare your workspace
 
@@ -79,7 +79,7 @@ Using Nano as an example, the generated `stone.yaml` file will look like this:
 
 ```yaml
 #
-# SPDX-FileCopyrightText: © 2025- AerynOS Developers
+# SPDX-FileCopyrightText: © 2025- aerynOS Developers
 #
 # SPDX-License-Identifier: MPL-2.0
 #
@@ -164,7 +164,7 @@ license     :
 
 ### Step 4 - Translate prerequisites into build dependencies
 
-Map each upstream requirement to the package name that exists in AerynOS. Use `pkg-config()` helpers when libraries provide `.pc` files. Toolchain components like `gcc` and `make` are already available inside the build environment, so you do not have to list them.
+Map each upstream requirement to the package name that exists in aerynOS. Use `pkg-config()` helpers when libraries provide `.pc` files. Toolchain components like `gcc` and `make` are already available inside the build environment, so you do not have to list them.
 
 | Upstream prerequisite | Recipe build dependency           |
 |-----------------------|-----------------------------------|
@@ -192,7 +192,7 @@ Combining all the prior steps gives you a complete `stone.yaml`:
 
 ```yaml
 #
-# SPDX-FileCopyrightText: © 2025- AerynOS Developers
+# SPDX-FileCopyrightText: © 2025- aerynOS Developers
 #
 # SPDX-License-Identifier: MPL-2.0
 #

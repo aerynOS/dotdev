@@ -25,9 +25,9 @@ Every time a package is built, `boulder` calls out to `moss` to have it construc
 
 The packages in this buildroot are resolved from one or more moss `stone.index` files, sorted in descending priority, such that the highest priority repository "wins" when package providers are resolved.
 
-The lowest priority repository will typically be the official AerynOS upstream package repository.
+The lowest priority repository will typically be the official aerynOS upstream package repository.
 
-If higher priority repositories are added, packages from these will in turn override the packages available in the official AerynOS upstream package repository.
+If higher priority repositories are added, packages from these will in turn override the packages available in the official aerynOS upstream package repository.
 
 The next section deals with how to create and register a higher priority local moss-format repository, which is colloquially referred to as a "local repo".
 
@@ -81,7 +81,7 @@ This is what `local-x86_64.kdl` should look like after the above commands have b
 local-x86_64 {
   repositories {
     volatile {
-      description "AerynOS volatile stream (CDN)"
+      description "aerynOS volatile stream (CDN)"
       base-uri "https://cdn.aerynos.dev/"
       channel "main"
       version "stream/volatile"
@@ -123,12 +123,12 @@ moss repo list
 
 #### Package resolution order
 
-In the above priority tower, each moss-format package would first get resolved via the `local` repository (priority 100), then from the `volatile` repository (priority 10), and finally from the `unstable` repository (priority 0). The latter of which is the official upstream AerynOS moss-format `.stone` package repository.
+In the above priority tower, each moss-format package would first get resolved via the `local` repository (priority 100), then from the `volatile` repository (priority 10), and finally from the `unstable` repository (priority 0). The latter of which is the official upstream aerynOS moss-format `.stone` package repository.
 
 
 #### Disabling moss-format repositories
 
-Users of AerynOS should generally _not_ have the `volatile` repository be enabled, because this repository is where new `.stone` packages land right after being built. This means the repository can potentially be in an undefined and volatile state when building large build queues (hence the name).
+Users of aerynOS should generally _not_ have the `volatile` repository be enabled, because this repository is where new `.stone` packages land right after being built. This means the repository can potentially be in an undefined and volatile state when building large build queues (hence the name).
 
 Therefore, it can be useful to disable moss-format repositories without deleting their definitions from the local system:
 
@@ -165,7 +165,7 @@ moss repo list
 To actually build a recipe, it is recommended that new packagers start out by building `nano`.
 
 ```bash
-# Go into the root of the AerynOS recipe directory 
+# Go into the root of the aerynOS recipe directory 
 gotoaosrepo
 # change to the directory holding the nano recipe
 chpkg nano
@@ -183,7 +183,7 @@ just mv-local
 just ls-local
 ```
 
-Note that the basic packaging workflow in AerynOS assumes that you are using a local repository.
+Note that the basic packaging workflow in aerynOS assumes that you are using a local repository.
 
 If you are building multiple package recipes, you will need to `just build` and `just mv-local` for each package recipe sequentially.
 
@@ -220,6 +220,6 @@ This will effectively make the new system state "forget" the nano version instal
 
 ## Ending notes
 
-If you have made it this far, congratulations! You should now understand the basic workflow of packaging and managing repositories with AerynOS.
+If you have made it this far, congratulations! You should now understand the basic workflow of packaging and managing repositories with aerynOS.
 
-Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that have been automated by the AerynOS developers.
+Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that have been automated by the aerynOS developers.
