@@ -139,6 +139,9 @@ export default defineConfig({
                   label: "Window Managers",
                   items: [
                     { slug: "users/desktops/window-managers" },
+                    { slug: "users/desktops/window-managers/hyprland" },
+                    { slug: "users/desktops/window-managers/mangowm" },
+                    { slug: "users/desktops/window-managers/niri" },
                     { slug: "users/desktops/window-managers/sway" },
                   ],
                 },
