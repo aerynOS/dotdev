@@ -19,7 +19,7 @@ export default defineConfig({
         light: "@/images/logo-light-mode.svg",
         replacesTitle: false,
       },
-      title: "AerynOS Docs",
+      title: "aerynOS Docs",
       // Multilingual reference implementation:
       // locales: {
       //   root: { label: "English", lang: "en" },
@@ -39,7 +39,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/AerynOS/dotdev",
+          href: "https://github.com/aerynOS/dotdev",
         },
         {
           icon: "zulip",
@@ -49,12 +49,12 @@ export default defineConfig({
         {
           icon: "mastodon",
           label: "Mastodon",
-          href: "https://hachyderm.io/@AerynOS",
+          href: "https://hachyderm.io/@aerynOS",
         },
       ],
       customCss: ["@/styles/global.css"],
       editLink: {
-        baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
+        baseUrl: "https://github.com/aerynOS/dotdev/edit/main/",
       },
       lastUpdated: true,
       components: {
@@ -85,7 +85,7 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "AerynOS",
+          label: "aerynOS",
           items: [
             { slug: "aerynos" },
             { slug: "aerynos/overview" },

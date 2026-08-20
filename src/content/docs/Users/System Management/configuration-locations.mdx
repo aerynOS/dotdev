@@ -6,11 +6,11 @@ license: "CC-BY-SA-4.0"
 copyright: "Copyright © 2025 aerynOS Developers"
 ---
 
-AerynOS ships configuration in a stateless layout. Packages deliver defaults in `/usr/share/defaults`, while administrator and user changes live elsewhere so updates can proceed without overwriting your work.
+aerynOS ships in a stateless layout, meaning the OS is completely separated from user data and configuration. 
 
 ## System defaults
 
-Default files mirror the traditional `/etc` hierarchy under `/usr/share/defaults`.
+The OS packages no longer reside under `/etc`. They now go to `/usr/share/defaults`. The traditional `/etc` directory hierarchy is preserved under `/usr`. `/etc` is now strictly reserved for User/Admin data and configuration. As a result all system updates now occur without touching user data.
 
 | Purpose | Default location | Example contents |
 | --- | --- | --- |
@@ -21,23 +21,22 @@ Default files mirror the traditional `/etc` hierarchy under `/usr/share/defaults
 | Sudo configuration | `/usr/share/defaults/sudo` | `sudoers`, drop-in files |
 | SSH defaults | `/usr/share/defaults/ssh` | `ssh_config`, `sshd_config` |
 
-
-Packages may add more directories under `/usr/share/defaults` as required. The layout always mirrors where the file would appear under `/etc` on a traditional filesystem.
+Packages may add more directories under `/usr/share/defaults` as required, but the layout will always mirror where the file would have appeared under `/etc` on a traditional filesystem.
 
 ## System overrides
 
-Place administrator overrides in `/etc`. Files in `/etc` shadow anything under `/usr/share/defaults` and survive package updates. Use drop-in directories such as `/etc/pam.d` or `/etc/sudoers.d` to keep customisations scoped and easy to audit.
-
+Overrides are global (administrator-level) modifications that "override" the default environment of AerynOS, including system setup, configuration, hardware and current state. Because these overrides live in the /etc folder, they survive package updates. Create "drop-in" directories such as `/etc/pam.d` or `/etc/sudoers.d` to keep customisations scoped and easy to audit.
 When you need to revert to the shipped defaults, remove the override from `/etc` and Moss will fall back to the matching file in `/usr/share/defaults`.
 
 ## User-level configuration
 
-Desktop and application settings follow the XDG Base Directory specification. Store per-user changes in:
+User-level configurations include desktop and app settings. These follow the XDG Base Directory specification. Store per-user changes in:
 
 - `~/.config` for configuration files
 - `~/.local/share` for data files
 
-These paths override both `/etc` and `/usr/share/defaults` for the owning user.
+System configuration lookups follow a strict path: The user’s personal configurations are prioritized. If any fail, the system falls back to the settings under `/etc`. If any of these in turn fail, it resolves to the system defaults at `/usr/share/defaults`.
+
 
 ## Where to look next
 
