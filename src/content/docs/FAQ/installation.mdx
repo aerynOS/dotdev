@@ -12,24 +12,42 @@ import { Aside } from "@astrojs/starlight/components";
 
 ### Which CPUs does aerynOS support?
 
-aerynOS is currently only compiled for the x86-64-v2 target architecture, which means that it will run on CPUs supporting x86-64-v2 or greater psABI feature levels.
+aerynOS is currently compiled solely for the x86-64-v2 target architecture. It will also run on CPUs supporting x86-64-v3, and x86-64-v3, because psABI feature levels are backwards compatible.
 
-Checking the currently supported x86-64 psABI feature level of a system can be done by typing the following command in a terminal as a normal user:
+To check which you have, type the following command in a terminal (as a normal user):
 
 ```
 /usr/lib64/ld-linux-x86-64.so.2 --help | grep "x86-64-"
 ```
 
-On an x86-64-v2 based system, you will see the following output:
+On an x86-64-v2 based system, you should see the following output:
 
 ```
   x86-64-v4
   x86-64-v3
   x86-64-v2 (supported, searched)
 ```
+If instead it yields an error such as:
+
+`--help: error while loading shared libraries: --help: cannot open shared object file`
+
+...you most likely have an older glibc library, in which case...
+
+Try the code block below instead. It relies on the kernel, with no binary dependencies, so should work for you.
+
+```awk '
+BEGIN {
+    while (!/flags/) if (getline < "/proc/cpuinfo" != 1) exit 1
+    if (/lm/&&/cmov/&&/cx8/&&/fpu/&&/fxsr/&&/mmx/&&/syscall/&&/sse2/) level = 1
+    if (level == 1 && /cx16/&&/lahf/&&/popcnt/&&/sse4_1/&&/sse4_2/&&/ssse3/) level = 2
+    if (level == 2 && /avx/&&/avx2/&&/bmi1/&&/bmi2/&&/f16c/&&/fma/&&/abm/&&/movbe/&&/xsave/) level = 3
+    if (level == 3 && /avx512f/&&/avx512bw/&&/avx512cd/&&/avx512dq/&&/avx512vl/) level = 4
+    if (level > 0) print "Highest supported psABI level: x86-64-v" level
+}
+'```
 
 <Aside type="note">
-    If the x86-64-v3 and x86-64-v4 psABI feature levels were supported, they would also show `(supported, searched)` next to them. aerynOS will still work on these systems.
+    If the advanced x86-64-v3 and x86-64-v4 psABI feature levels were also supported, they would also show as `supported, searched`. aerynOS will still work on these systems, but at an x86-64-v2 feature level.
 </Aside>
 
 ### Does aerynOS offer NVIDIA GPU support?
