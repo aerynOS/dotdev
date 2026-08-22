@@ -6,25 +6,23 @@ license: "CC-BY-SA-4.0"
 copyright: "Copyright © 2025 aerynOS Developers"
 ---
 
-To set up a aerynOS system to be able to build package recipes, a few prerequisites need to be
-installed, and a new directory for storing local build artifacts needs to be set up.
+To set up an aerynOS system capable of building package recipes, a few prerequisites need to be installed, and a new directory for storing local build artifacts needs to be set up.
+(Artifacts are the binaries, executables, libraries, packages, bundled assets, documentation and metadata generated during the building process.)
 
 
 ## Installing the `build-essential` package
 
-We maintain a `build-essential` metapackage that should contain the basics for getting started with packaging on aerynOS.
+We maintain a `build-essential` metapackage that should contain the basics for getting started with packaging on aerynOS. (“Build-essential” meaning the fundamental tools required to compile software from sourcecode, and “metapackage”, an empty package designed to gather all those tools.)
 
 ```bash
 sudo moss sync -u
 sudo moss it build-essential
 ```
 
-
-## Activating the aerynOS helper scripts
+## Cloning a local repository and activating the aerynOS helper scripts
 
 The easiest way to create a local repository is to use the helper script distributed with the aerynOS recipe repository in the `tools/` directory.
-
-Start by cloning the recipes/ git repository:
+To activate the helper script distributed with the aerynOS recipe repository in the `tools/` directory, start by cloning the `recipes/` git repository:
 
 ```bash
 mkdir -pv Projects/aerynos/
@@ -32,7 +30,7 @@ pushd Projects/aerynos
 git clone https://github.com/aerynOS/recipes
 ```
 
-After the recipes/ git repository has been cloned, symlink helpers.bash into `~/.bashrcd.d/`:
+Once the `recipes/` git repository has been cloned, create a symlink pointing to the helpers.bash script and place it in `~/.bashrcd.d/` as follows:
 
 ```bash
 popd
@@ -40,43 +38,39 @@ mkdir -pv ~/.bashrc.d/
 ln -sv ~/Projects/aerynos/recipes/tools/helpers.bash ~/.bashrc.d/90-aerynos-helpers.bash
 ```
 
-Finally, execute the following in a new terminal tab:
+Finally, execute the following in a new terminal window:
 
 ```bash
 cd ~
 gotoaosrepo
 ```
-
-If the helpers script has been correctly loaded, the `gotoaosrepo` command should switch to the directory containing the recipes/ git repository clone.
+If the helpers script has been correctly loaded, the `gotoaosrepo` (go to Aeryn OS repo) command should switch to the directory containing the `recipes/ git` repository clone.
 
 
 ### Setting up git hooks and linters
 
-The `just` command runner should have been installed as part of `build-essential`.
+The `just` command runner (as in "it’s just a command runner") should have been installed as part of `build-essential`.
 
 Run the following:
-
 ```bash
 gotoaosrepo
 just init
 ```
 
-This will setup git hooks that will lint for the most common packaging errors upon git commit, as well as fill out commit message templates for you to edit as appropriate.
+This will setup git hooks (automated guardrails) that will lint (act as a “lint trap”) for the most common packaging errors upon `git commit`, as well as fill out commit message templates for you to edit as appropriate.
 
 
 ### Setting up `git diff` auto-conversion of `manifest.*.bin` files
 
-This will make it so you can view `git diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
+Git needs a diff filter so it can translate binary files into text for comparison. The edit below will make it so you can view `git diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
+Edit the recipe repo `.git/config` file, adding the following text just below the `[core]` section:
 
-Edit the recipe repo `.git/config` file to contain the following below the `[core]` section:
-
-```ini
-[diff "moss"]
+`[diff "moss"]
     textconv = moss inspect
-    binary = true
-```
+    binary = true`
 
-The recipe repo already contains the `.gitattributes` file that sets up the `moss` diff filter referenced here.
+(The recipe repo already contains the `.gitattributes` file that sets up the `moss` diff filter referenced here.)
+
 
 ### Setting up the `git gone` alias
 
@@ -84,20 +78,20 @@ This will make it so that executing `git gone` will remove any local branches th
 
 Edit your `~/.gitconfig` file to contain the following:
 
-```ini
-[alias]
-    gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
-```
+`[alias]
+    gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"`
 
 
-## Adding /etc/subuid and /etc/subgid entries
+## Adding `/etc/subuid` and `/etc/subgid` entries
 
-Since `boulder` uses user-namespaces to set up isolated build roots, it is necessary to set up a subuid and a subgid file for the relevant users first:
+So that multiple packagers can work without overwriting or conflicting with each other, `boulder` employs user-namespaces to set up isolated build roots. So it is necessary to set up a subuid (subordinate user id) and a subgid (subordinate group id) file for each packager:
 
 ```bash
 sudo touch /etc/sub{uid,gid}
 sudo usermod --add-subuids 1000000-1065535 --add-subgids 1000000-1065535 root
 sudo usermod --add-subuids 1065536-1131071 --add-subgids 1065536-1131071 "$USER"
 ```
+<Aside type="caution">
+Check first to see if  ‘/etc/subuid’ and ‘/etc/subgid’ already exist. If so, be sure to choose higher ranges than shown above, so as to avoid conflicts with existing ranges in your directories.
+</Aside>
 
-If `/etc/subuid` and `/etc/subgid` already exist, adapt the above as appropriate.
