@@ -163,6 +163,7 @@ export default defineConfig({
                 { slug: "packaging/workflow/creating-a-new-recipe" },
                 { slug: "packaging/workflow/updating-an-existing-recipe" },
                 { slug: "packaging/workflow/building-and-testing-packages" },
+                { slug: "packaging/workflow/using-git" },
                 { slug: "packaging/workflow/submitting-a-pr" },
                 { slug: "packaging/workflow/checking-for-updates" },
               ],

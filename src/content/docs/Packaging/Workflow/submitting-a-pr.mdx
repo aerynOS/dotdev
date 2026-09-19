@@ -1,6 +1,6 @@
 ---
 title: 'Submitting a PR'
-lastUpdated: 2026-01-11T21:22:00
+lastUpdated: 2026-09-19T16:00:00Z
 description: "How to submit a PR into the aerynOS repository"
 license: "CC-BY-SA-4.0"
 copyright: "Copyright © 2025 aerynOS Developers"
@@ -10,7 +10,31 @@ import { Aside } from "@astrojs/starlight/components";
 
 # Submitting packages to aerynOS repository
 
-Once you have prepared your package, you can submit it to the aerynOS repository by creating a pull request (PR). There are certain guidelines to follow when submitting a PR:
+Once you have prepared your package, you can submit it to the aerynOS repository by creating a pull request (PR). There are certain guidelines to follow when submitting a PR.
+
+## One commit per package
+
+aerynOS requires **one commit per package**. Each recipe you add or change is its own commit. Do not combine several packages into one commit, and do not leave multiple commits for the same package.
+
+A pull request may still contain several commits when you add a package plus new dependencies — each dependency is one commit:
+
+```
+libfoo: Add at v1.0.0
+libbar: Add at v2.1.0
+mypackage: Add at v3.4.5
+```
+
+How to create those commits is covered in [Using git](/packaging/workflow/using-git/).
+
+## Push the branch and open the pull request
+
+After each package on the branch has been committed:
+
+```bash
+git push -u origin HEAD
+```
+
+Then open a pull request from your fork against `aerynOS/recipes` on GitHub. GitHub does not offer a native template picker, so use the **Preview** tab in the pull request description to choose the template that matches your change (new recipe, recipe update, bug fix, and so on) and fill it in completely.
 
 ## Naming Pull Requests
 
