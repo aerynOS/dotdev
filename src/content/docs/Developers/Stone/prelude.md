@@ -1,0 +1,38 @@
+---
+title: Prelude
+lastUpdated: 2026-10-02T15:00:00Z
+description: The version-agnostic header of Stones
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+*Stones* are encoded with a version agnostic header, the Prelude, ensuring that version-specific fields can be handled separately from version and format detection. This is a 32-byte header at the start of the *stone*.
+
+## Fields
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| magic | str | 4 | Always `0x006d6f73`. |
+| data | Version-dependent | 24 | Version-specific header of the *stone*. |
+| version | uint | 4 | Version number, i.e. `1`. |
+
+### magic
+
+It's the [magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) of the Stone format.
+
+The `magic` field always contains `['\0', 'M', 'O', 'S']`. It is defined after aerynOS's package manager: `moss`.
+
+In the Rust language it is defined as:
+
+```rust
+pub const STONE_MAGIC: &[u8; 4] = b"\0mos";
+```
+
+### data
+
+The content of the `data` field depends on the Version field.
+Documentation about Stone versions is available in the next pages.
+
+### version
+
+A number that uniquely identifies the version of the Stone format in use.

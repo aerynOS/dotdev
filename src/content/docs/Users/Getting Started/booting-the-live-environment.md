@@ -1,0 +1,32 @@
+---
+title: 'Booting the Live Environment'
+lastUpdated: 2026-10-02T15:00:00Z
+description: "Booting into the aerynOS Live Environment"
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+## Booting from a USB Drive
+
+:::caution
+Currently NVIDIA Drivers are not implemented by the live environment and will fallback to nouveau drivers.
+:::
+
+1. Insert the bootable USB drive into your system and boot from the USB drive.
+2. Adjust or override your BIOS settings to boot from the USB drive.
+3. You should see the aerynOS boot process, and you will be presented with the live environment.
+4. **If utilizing Ventoy** select the aerynOS ISO file to boot from.
+
+## Testing the Live Environment
+
+:::tip
+For a representative experience, you will need to install aerynOS. The live environment will run slower than an installed system due to the limitations of running from a USB drive.
+:::
+
+Once you have booted into the live environment, you can test aerynOS without installing it on your system.
+
+- Explore the desktop environment.
+- Test the pre-installed applications.
+- Check the system performance.
+- Verify the hardware compatibility.
+- Connect to the internet and browse the web.

@@ -1,0 +1,225 @@
+---
+title: 'Basic packaging workflow'
+lastUpdated: 2026-10-02T15:00:00Z
+description: "Building packages locally and testing them"
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+Once the [prerequisites](/packaging/workflow/prerequisites/) have been handled, it is time to learn how to install newly built local moss-format `.stone` packages.
+
+
+## Understanding moss-format repositories
+
+When building and testing packages locally, boulder (and moss) can be configured to consult a local moss-format repository containing moss-format `.stone` packages and a `stone.index` local repository index.
+
+### `stone.index` files
+
+The `stone.index` file is what both moss and boulder consult when they check which packages are available to be installed into moss-maintained system roots.
+
+Adding a moss-format repository is as simple as registering a new location from where to fetch `stone.index` files, which will be shown in detail later on this page.
+
+### `moss` build roots
+
+Every time a package is built, `boulder` calls out to `moss` to have it construct a pristine build root directory (called a 'buildroot') with the necessary package build prerequisites installed.
+
+The packages in this buildroot are resolved from one or more moss `stone.index` files, sorted in descending priority, such that the highest priority repository "wins" when package providers are resolved.
+
+The lowest priority repository will typically be the official aerynOS upstream package repository.
+
+If higher priority repositories are added, packages from these will in turn override the packages available in the official aerynOS upstream package repository.
+
+The next section deals with how to create and register a higher priority local moss-format repository, which is colloquially referred to as a "local repo".
+
+
+## Creating a local repository
+
+After the helper script has been activated in `bash`, open a new tab or a new terminal, and execute the following commands:
+
+```bash
+# create a new tab or open a new terminal
+gotoaosrepo
+just create-local
+just index-local
+```
+
+The `just create-local` invocation will set up an empty `~/.cache/local_repo/x86_64/` directory, and the `just index-local` invocation will create a `stone.index` file for the directory.
+
+
+### Making boulder use the local repository
+
+Boulder will need to have its list of "build profiles" be updated before it will consult the `~/.cache/local_repo/x86_64/stone.index` moss-format repository index created above:
+
+```bash
+boulder profile list
+# output
+default-x86_64:
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
+
+
+# add new local-x86_64 build profile
+# note: ${HOME} will be replaced by the actual home directory of the user
+#       invoking the command. In the example below, ${HOME} = /home/live
+boulder profile add \
+  --repo name=volatile,base-uri=https://cdn.aerynos.dev,version=stream/volatile,priority=0 \
+  --repo name=local,uri=file://${HOME}/.cache/local_repo/x86_64/stone.index,priority=100 \
+  local-x86_64
+boulder profile list
+# output
+default-x86_64:
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
+local-x86_64:
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100]
+```
+
+Behind the scenes, `boulder` builds and saves an appropriately named build profile to `~/.config/boulder/profile.d/`.
+
+This is what `local-x86_64.kdl` should look like after the above commands have been run successfully:
+
+```kdl
+local-x86_64 {
+  repositories {
+    volatile {
+      description "aerynOS volatile stream (CDN)"
+      base-uri "https://cdn.aerynos.dev/"
+      channel "main"
+      version "stream/volatile"
+      arch "x86_64"
+      priority 0
+    }
+    local {
+      description "Local repository"
+      uri "file:///home/live/.cache/local_repo/x86_64/stone.index"
+      priority 100
+    }
+  }
+}
+```
+
+
+### Making `moss` use the local repository
+
+Listing and adding moss-format repositories containing stone.index files is done as follows:
+
+
+```bash
+moss repo list
+# output
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+# add repositories
+# note: ${HOME} will be replaced by the actual home directory of the user
+#       invoking the command. In the example below, ${HOME} = /home/live"
+sudo moss repo add unstable https://cdn.aerynos.dev --root-index channel=main,version=stream/unstable -p 0
+sudo moss repo add volatile https://cdn.aerynos.dev --root-index channel=main,version=stream/volatile -p 10
+sudo moss repo add local file://${HOME}/.cache/local_repo/x86_64/stone.index -p 100
+moss repo list
+# output
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10]
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100]
+```
+
+
+#### Package resolution order
+
+In the above priority tower, each moss-format package would first get resolved via the `local` repository (priority 100), then from the `volatile` repository (priority 10), and finally from the `unstable` repository (priority 0). The latter of which is the official upstream aerynOS moss-format `.stone` package repository.
+
+
+#### Disabling moss-format repositories
+
+Users of aerynOS should generally _not_ have the `volatile` repository be enabled, because this repository is where new `.stone` packages land right after being built. This means the repository can potentially be in an undefined and volatile state when building large build queues (hence the name).
+
+Therefore, it can be useful to disable moss-format repositories without deleting their definitions from the local system:
+
+```bash
+sudo moss repo disable volatile 
+sudo moss repo disable local
+moss repo list
+# output
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10] (disabled)
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100] (disabled)
+```
+
+
+#### Enabling moss-format repositories
+
+However, when testing locally built packages, they _must_ be built against the `local-x86_64` boulder build profile, which in turns relies on the `volatile` repository via the boulder `local-x86_64` build profile.
+
+Hence, when testing locally built packages, you may need to _**temporarily**_ enable the `volatile` repository for moss to resolve from.
+
+```bash
+sudo moss repo enable volatile 
+sudo moss repo enable local
+moss repo list
+# output
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile-stream = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10] (disabled)
+ - local-x86_64 = file:///home/live/.cache/local_repo/x86_64/stone.index [100] (disabled)
+```
+
+
+## Building recipes using the `local-x86_64` profile
+
+To actually build a recipe, it is recommended that new packagers start out by building `nano`.
+
+```bash
+# Go into the root of the aerynOS recipe directory 
+gotoaosrepo
+# change to the directory holding the nano recipe
+chpkg nano
+# bump the release number in the nano recipe
+just bump
+# check the difference between the local state and the upstream recipe state
+git diff
+# build the bumped nano recipe
+just build
+# check the difference between the local state and the upstream recipe state
+git status
+# move the newly built .stone build artifacts to the local repository
+just mv-local
+# list the build artifacts present in the local repository
+just ls-local
+```
+
+Note that the basic packaging workflow in aerynOS assumes that you are using a local repository.
+
+If you are building multiple package recipes, you will need to `just build` and `just mv-local` for each package recipe sequentially.
+
+
+## Updating the installed system state
+
+Testing your package(s) is now as simple as:
+
+- Enabling (or disabling) the relevant moss-format repositories with:
+  ```bash
+  sudo moss repo enable/disable <the repository>
+  ```
+- Updating moss' view of the enabled moss-format repository indices with:
+  ```bash
+  sudo moss sync -u
+  ```
+
+
+## Cleaning the local repository
+
+Often, it will be prudent to clean out the local repository after the associated recipe PR has been accepted upstream.
+
+```bash
+gotoaosrepo
+just clean-local
+sudo moss repo disable volatile
+sudo moss repo disable local
+sudo moss sync -u 
+```
+
+This will sync the the local system to a new installed system state made only from the upstream `unstable` moss-format `.stone` package repository state.
+
+This will effectively make the new system state "forget" the nano version installed from the local repository in the previous system state.
+
+## Ending notes
+
+If you have made it this far, congratulations! You should now understand the basic workflow of packaging and managing repositories with aerynOS.
+
+Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that have been automated by the aerynOS developers.

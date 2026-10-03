@@ -1,0 +1,42 @@
+---
+title: COSMIC
+lastUpdated: 2026-10-02T15:00:00Z
+description: COSMIC Desktop
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular choice with aerynOS users. COSMIC is notable for being written in Rust and using a modern multiprocess architecture, while being Wayland-only. For many, this makes aerynOS and COSMIC an ideal partnership.
+
+### Installing COSMIC on aerynOS
+
+aerynOS currently only offers one iso with a GNOME live environment. However, `lichen` is a net based installer that allows users to select their Desktop Environment at install time. As such, you can install aerynOS COSMIC edition directly from the GNOME based aerynOS installer ISO.
+
+If you are already using GNOME, you are able to install Cosmic Desktop side by side and select which Desktop Environment to use in `GDM` at login. You do this by installing one of three package sets:
+
+```bash
+sudo moss install pkgset-aeryn-cosmic-minimal
+sudo moss install pkgset-aeryn-cosmic-recommended
+sudo moss install pkgset-aeryn-cosmic-full
+```
+The names are fairly self explanatory:
+* Minimal: The minimum number of packages required for a Cosmic Desktop session
+* Recommended: The minimal Cosmic Desktop session plus additional recommended applications
+* Full: The recommended Cosmic Desktop session plus additional optional applications
+
+### Controlling the display manager
+
+If you've installed COSMIC over the top of a GNOME install, you can still log into your COSMIC session from `gdm`. You can also safely remove `gdm` and have `cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+
+#### Installing cosmic-greeter
+
+```bash
+sudo moss install cosmic-greeter
+```
+
+#### Removing gdm
+If you wish to remove `gdm`, you would use the following command:
+
+```bash
+sudo moss remove gdm
+```

@@ -10,6 +10,7 @@ extend-ignore-re = [
 [default.extend-words]
 # Specifically for the "General FAQ" page.
 aer = "aer"
+indexs = "indexs"
 
 [files]
 extend-exclude = ["/package-lock.json"]
