@@ -1,0 +1,9 @@
+---
+title: Content
+lastUpdated: 2026-10-02T15:00:00Z
+description: The format of the Content record
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+The Content record contains a blob. Its size is indicated in the Payload sub-header, as this kind of record spans the entire payload. There must be exactly one Content record inside a payload.

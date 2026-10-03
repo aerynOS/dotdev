@@ -1,0 +1,45 @@
+---
+title: 'Overview'
+lastUpdated: 2026-10-02T15:00:00Z
+description: Introduction to the `stone.yaml` format
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+Simply put, a recipe is some metadata to describe a software package, and the associated *instructions* required to build that package in a reproducible fashion. Doing so allows us to automate builds, and provide software updates. At a surface level, our `stone.yml` recipe format has an awful lot in common with other packaging systems.
+
+## A basic recipe
+
+How might a `stone.yml` look like for a very trivial package, such as the [Nano editor](https://nano-editor.org)?
+
+```yaml
+name        : nano
+version     : 8.7
+release     : 38
+homepage    : https://www.nano-editor.org/
+upstreams   :
+    - https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz : afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9
+summary     : GNU Text Editor
+description : |
+    Nano is a small and simple text editor for use on the terminal.
+    It copied the interface and key bindings of the Pico editor but
+    added several missing features: undo/redo, syntax highlighting,
+    line numbers, softwrapping, multiple buffers, selecting text by
+    holding Shift, search-and-replace with regular expressions, and
+    several other conveniences.
+license     :
+    - GPL-3.0-or-later
+builddeps   :
+    - binary(msgfmt)
+    - pkgconfig(libmagic)
+    - pkgconfig(ncursesw)
+    - pkgconfig(zlib)
+setup       : |
+    %configure
+build       : |
+    %make
+install     : |
+    %make_install
+```
+
+..It really is that simple. However, do not let the simplicity of the format fool you, `boulder` has a lot of hidden powers.

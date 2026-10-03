@@ -1,0 +1,49 @@
+---
+title: Configuration Locations
+lastUpdated: 2026-10-02T15:00:00Z
+description: Understand where packages ship their default configuration and how to override it on a stateless system.
+license: "CC-BY-SA-4.0"
+copyright: "Copyright © 2025 aerynOS Developers"
+---
+
+aerynOS ships in a stateless layout, meaning the OS is completely separated from user data and configuration. 
+
+## System defaults
+
+The OS packages no longer reside under `/etc`. They now go to `/usr/share/defaults`. The traditional `/etc` directory hierarchy is preserved under `/usr`. `/etc` is now strictly reserved for User/Admin data and configuration. As a result all system updates now occur without touching user data.
+
+| Purpose | Default location | Example contents |
+| --- | --- | --- |
+| Base system settings | `/usr/share/defaults/etc` | `ld.so.conf`, `libnl`, `tpm2-tss` |
+| PAM policies | `/usr/share/defaults/pam.d` | `sudo`, `system-login`, `polkit-1` |
+| Shell profiles | `/usr/share/defaults/profile` and `/usr/share/defaults/profile.d` | `00-aeryn.sh`, interactive shell tweaks |
+| Service defaults | `/usr/share/defaults/environment.d` | Session-wide environment snippets |
+| Sudo configuration | `/usr/share/defaults/sudo` | `sudoers`, drop-in files |
+| SSH defaults | `/usr/share/defaults/ssh` | `ssh_config`, `sshd_config` |
+
+Packages may add more directories under `/usr/share/defaults` as required, but the layout will always mirror where the file would have appeared under `/etc` on a traditional filesystem.
+
+## System overrides
+
+Overrides are global (administrator-level) modifications that "override" the default environment of AerynOS, including system setup, configuration, hardware and current state. Because these overrides live in the /etc folder, they survive package updates. Create "drop-in" directories such as `/etc/pam.d` or `/etc/sudoers.d` to keep customisations scoped and easy to audit.
+When you need to revert to the shipped defaults, remove the override from `/etc` and Moss will fall back to the matching file in `/usr/share/defaults`.
+
+## User-level configuration
+
+User-level configurations include desktop and app settings. These follow the XDG Base Directory specification. Store per-user changes in:
+
+- `~/.config` for configuration files
+- `~/.local/share` for data files
+
+System configuration lookups follow a strict path: The user’s personal configurations are prioritized. If any fail, the system falls back to the settings under `/etc`. If any of these in turn fail, it resolves to the system defaults at `/usr/share/defaults`.
+
+
+## Where to look next
+
+Run the following command to explore the current defaults on your system:
+
+```bash
+ls /usr/share/defaults
+```
+
+Combine this with `moss search-file` to identify which package owns a specific default file when you need to adjust or report an issue.
